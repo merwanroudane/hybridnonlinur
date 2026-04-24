@@ -7,7 +7,7 @@ name = "hybridnonlinur"
 version = "1.0.0"
 description = "Nonlinear Hybrid Unit Root Tests — A comprehensive Python library for Fourier-based, ESTAR, Quantile, and Fractional Frequency nonlinear unit root testing."
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 requires-python = ">=3.9"
 authors = [
     {name = "Dr. Merwan Roudane", email = "merwanroudane920@gmail.com"}
@@ -17,7 +17,7 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Mathematics",
-    "License :: OSI Approved :: MIT License",
+
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
