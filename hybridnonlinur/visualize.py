@@ -9,9 +9,9 @@ from matplotlib import rcParams
 # ── Global Style ──
 COLORS = {
     'primary': '#2563EB', 'secondary': '#7C3AED', 'accent': '#059669',
-    'danger': '#DC2626', 'warning': '#D97706', 'surface': '#0F172A',
-    'text': '#F8FAFC', 'grid': '#334155', 'bg': '#1E293B',
-    'card': '#1E293B', 'gradient1': '#3B82F6', 'gradient2': '#8B5CF6',
+    'danger': '#DC2626', 'warning': '#D97706', 'surface': '#FFFFFF',
+    'text': '#1E293B', 'grid': '#E2E8F0', 'bg': '#F8FAFC',
+    'card': '#FFFFFF', 'gradient1': '#3B82F6', 'gradient2': '#8B5CF6',
 }
 PALETTE = ['#3B82F6', '#8B5CF6', '#06B6D4', '#10B981', '#F59E0B',
            '#EF4444', '#EC4899', '#6366F1', '#14B8A6']
