@@ -1,0 +1,126 @@
+<h3 style="font-family:sans-serif">Table 1: Unit Root Test Results</h3><table class="dataframe table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Test</th>
+      <th>Statistic</th>
+      <th>k*</th>
+      <th>Lag</th>
+      <th>CV 1%</th>
+      <th>CV 5%</th>
+      <th>CV 10%</th>
+      <th>Reject H₀ (5%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>KSS</td>
+      <td>-2.9962</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-3.770</td>
+      <td>-3.090</td>
+      <td>-2.770</td>
+      <td><span style="color:#EF4444;font-weight:bold">✗</span></td>
+    </tr>
+    <tr>
+      <td>Fourier-KSS</td>
+      <td>-3.4528</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>-4.350</td>
+      <td>-3.550</td>
+      <td>-3.170</td>
+      <td><span style="color:#EF4444;font-weight:bold">✗</span></td>
+    </tr>
+    <tr>
+      <td>Fourier-ADF</td>
+      <td>-4.2818</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>-4.420</td>
+      <td>-3.810</td>
+      <td>-3.490</td>
+      <td><span style="color:#10B981;font-weight:bold">✓</span></td>
+    </tr>
+    <tr>
+      <td>Fourier-FKSS (Bootstrap)</td>
+      <td>-3.4528</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>-4.152</td>
+      <td>-3.541</td>
+      <td>-3.198</td>
+      <td><span style="color:#EF4444;font-weight:bold">✗</span></td>
+    </tr>
+    <tr>
+      <td>Fourier-Kruse</td>
+      <td>18.5061</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>18.820</td>
+      <td>14.800</td>
+      <td>12.520</td>
+      <td><span style="color:#10B981;font-weight:bold">✓</span></td>
+    </tr>
+    <tr>
+      <td>FFKRUSE</td>
+      <td>22.4471</td>
+      <td>1.1</td>
+      <td>0</td>
+      <td>19.560</td>
+      <td>14.860</td>
+      <td>12.700</td>
+      <td><span style="color:#10B981;font-weight:bold">✓</span></td>
+    </tr>
+    <tr>
+      <td>Fourier-Sollis</td>
+      <td>9.5171</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>9.780</td>
+      <td>7.472</td>
+      <td>6.395</td>
+      <td><span style="color:#10B981;font-weight:bold">✓</span></td>
+    </tr>
+    <tr>
+      <td>FFSOLLIS</td>
+      <td>10.7636</td>
+      <td>1.1</td>
+      <td>0</td>
+      <td>10.165</td>
+      <td>7.910</td>
+      <td>6.871</td>
+      <td><span style="color:#10B981;font-weight:bold">✓</span></td>
+    </tr>
+    <tr>
+      <td>Fourier-Sollis (Zero-Mean)</td>
+      <td>9.5171</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>9.767</td>
+      <td>7.472</td>
+      <td>6.391</td>
+      <td><span style="color:#10B981;font-weight:bold">✓</span></td>
+    </tr>
+    <tr>
+      <td>KSS-FF</td>
+      <td>-4.3171</td>
+      <td>1.1</td>
+      <td>0</td>
+      <td>-4.103</td>
+      <td>-3.522</td>
+      <td>-3.212</td>
+      <td><span style="color:#10B981;font-weight:bold">✓</span></td>
+    </tr>
+    <tr>
+      <td>FWKSS</td>
+      <td>-2.6440</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>-4.350</td>
+      <td>-3.550</td>
+      <td>-3.170</td>
+      <td><span style="color:#EF4444;font-weight:bold">✗</span></td>
+    </tr>
+  </tbody>
+</table><p style="font-size:11px;color:#94A3B8">Note: ✓ = reject H₀ (unit root) at 5%. KSS/Fourier-KSS/ADF use left-tail t-test; Kruse/Sollis use right-tail F/τ-test.</p>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>hybridnonlinur — Nonlinear Hybrid Unit Root Tests in Python</title>
+<meta name="description" content="A comprehensive Python library implementing 13 nonlinear unit root tests for time series econometrics. Fourier-based, ESTAR, Quantile, Fractional Frequency testing.">
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #FAFBFE; --card: #FFFFFF; --text: #1E293B; --text2: #475569;
+  --text3: #94A3B8; --border: #E2E8F0; --accent: #4F46E5;
+  --accent2: #7C3AED; --green: #059669; --red: #DC2626;
+  --blue: #2563EB; --orange: #D97706;
+  --gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #2563EB 100%);
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.05);
+  --radius: 12px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
+
+/* NAV */
+.nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:0 2rem; }
+.nav-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:64px; }
+.nav-logo { font-weight:800; font-size:1.25rem; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.nav-links { display:flex; gap:1.5rem; list-style:none; }
+.nav-links a { color:var(--text2); text-decoration:none; font-size:0.9rem; font-weight:500; transition:color 0.2s; }
+.nav-links a:hover { color:var(--accent); }
+
+/* HERO */
+.hero { padding:8rem 2rem 4rem; text-align:center; background:linear-gradient(180deg, #EEF2FF 0%, var(--bg) 100%); }
+.hero h1 { font-size:3.2rem; font-weight:900; line-height:1.15; margin-bottom:1rem; }
+.hero h1 span { background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hero .subtitle { font-size:1.2rem; color:var(--text2); max-width:700px; margin:0 auto 2rem; font-weight:400; }
+.hero-badges { display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem; }
+.badge { display:inline-flex; align-items:center; gap:0.4rem; padding:0.4rem 1rem; border-radius:99px;
+  font-size:0.82rem; font-weight:600; border:1px solid var(--border); background:white; color:var(--text2); }
+.badge.accent { background:var(--accent); color:white; border-color:var(--accent); }
+.hero-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+.btn { display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.75rem; border-radius:99px;
+  font-size:0.95rem; font-weight:600; text-decoration:none; transition:all 0.25s; }
+.btn-primary { background:var(--accent); color:white; box-shadow:0 4px 14px rgba(79,70,229,0.35); }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(79,70,229,0.45); }
+.btn-outline { background:white; color:var(--text); border:2px solid var(--border); }
+.btn-outline:hover { border-color:var(--accent); color:var(--accent); }
+
+/* SECTIONS */
+.container { max-width:1200px; margin:0 auto; padding:0 2rem; }
+section { padding:4rem 0; }
+.section-title { font-size:2rem; font-weight:800; margin-bottom:0.5rem; }
+.section-subtitle { color:var(--text2); font-size:1.05rem; margin-bottom:2.5rem; }
+
+/* CARDS */
+.card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:2rem; box-shadow:var(--shadow); transition:all 0.3s; }
+.card:hover { box-shadow:var(--shadow-lg); transform:translateY(-2px); }
+.card-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1.5rem; }
+.card h3 { font-size:1.1rem; font-weight:700; margin-bottom:0.5rem; }
+.card p { color:var(--text2); font-size:0.92rem; }
+.card-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; margin-bottom:1rem; }
+
+/* INSTALL */
+.install-box { background:#1E293B; border-radius:var(--radius); padding:1.5rem 2rem; color:#E2E8F0;
+  font-family:'JetBrains Mono',monospace; font-size:0.95rem; position:relative; margin:1.5rem 0; }
+.install-box .prompt { color:#7C3AED; }
+.install-box .cmd { color:#34D399; }
+
+/* TABLES */
+.results-table { width:100%; border-collapse:separate; border-spacing:0; border-radius:var(--radius);
+  overflow:hidden; box-shadow:var(--shadow); background:white; border:1px solid var(--border); }
+.results-table th { background:linear-gradient(135deg, #4F46E5, #7C3AED); color:white; padding:0.85rem 1rem;
+  font-size:0.82rem; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; text-align:left; }
+.results-table td { padding:0.75rem 1rem; font-size:0.88rem; border-bottom:1px solid var(--border); }
+.results-table tr:last-child td { border-bottom:none; }
+.results-table tr:hover td { background:#F8FAFC; }
+.results-table .reject-yes { color:var(--green); font-weight:700; }
+.results-table .reject-no { color:var(--red); font-weight:700; }
+td.mono { font-family:'JetBrains Mono',monospace; font-size:0.82rem; }
+
+/* IMAGES */
+.fig-container { margin:2rem 0; text-align:center; }
+.fig-container img { max-width:100%; border-radius:var(--radius); box-shadow:var(--shadow-md);
+  border:1px solid var(--border); }
+.fig-caption { margin-top:0.75rem; font-size:0.85rem; color:var(--text3); font-style:italic; }
+
+/* TEST DETAIL */
+.test-detail { background:white; border:1px solid var(--border); border-radius:var(--radius);
+  padding:1.5rem 2rem; margin:1.5rem 0; box-shadow:var(--shadow); }
+.test-detail h4 { font-size:1rem; font-weight:700; margin-bottom:0.25rem; }
+.test-detail .ref { font-size:0.82rem; color:var(--accent); margin-bottom:0.75rem; }
+.test-detail pre { background:#F1F5F9; border-radius:8px; padding:1rem; font-family:'JetBrains Mono',monospace;
+  font-size:0.8rem; overflow-x:auto; white-space:pre; line-height:1.6; color:var(--text); }
+
+/* AUTHOR */
+.author-card { display:flex; align-items:center; gap:2rem; background:white; border:1px solid var(--border);
+  border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); }
+.author-avatar { width:100px; height:100px; border-radius:50%; background:var(--gradient);
+  display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:white; flex-shrink:0; }
+.author-info h3 { font-size:1.3rem; font-weight:700; }
+.author-info p { color:var(--text2); font-size:0.92rem; }
+.author-links { display:flex; gap:1rem; margin-top:0.75rem; flex-wrap:wrap; }
+.author-links a { color:var(--accent); text-decoration:none; font-size:0.88rem; font-weight:500; }
+.author-links a:hover { text-decoration:underline; }
+
+/* FOOTER */
+footer { background:#1E293B; color:#CBD5E1; padding:3rem 2rem; text-align:center; margin-top:4rem; }
+footer a { color:#818CF8; text-decoration:none; }
+footer a:hover { text-decoration:underline; }
+
+/* REFERENCES */
+.ref-list { columns:2; column-gap:2rem; }
+.ref-list li { font-size:0.85rem; color:var(--text2); margin-bottom:0.5rem; break-inside:avoid; }
+
+/* RESPONSIVE */
+@media(max-width:768px) {
+  .hero h1 { font-size:2rem; }
+  .card-grid { grid-template-columns:1fr; }
+  .author-card { flex-direction:column; text-align:center; }
+  .ref-list { columns:1; }
+  .nav-links { display:none; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+<div class="nav-inner">
+  <div class="nav-logo">hybridnonlinur</div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#install">Install</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#visualizations">Visualizations</a></li>
+    <li><a href="#tests">All Tests</a></li>
+    <li><a href="#references">References</a></li>
+    <li><a href="https://github.com/merwanroudane/hybridnonlinur" target="_blank">GitHub ↗</a></li>
+  </ul>
+</div>
+</nav>
+
+<section class="hero">
+<div class="container">
+  <h1><span>hybridnonlinur</span></h1>
+  <p class="subtitle">A comprehensive Python library implementing <strong>13 nonlinear unit root tests</strong> from the frontier of time series econometrics — Fourier-based structural breaks, ESTAR/AESTAR nonlinearity, quantile regression, fractional frequencies, and wavelet preprocessing.</p>
+  <div class="hero-badges">
+    <span class="badge accent">v1.0.0</span>
+    <span class="badge">🐍 Python 3.9+</span>
+    <span class="badge">📊 13 Tests</span>
+    <span class="badge">📝 MIT License</span>
+    <span class="badge">✅ Production Ready</span>
+  </div>
+  <div class="hero-btns">
+    <a href="https://pypi.org/project/hybridnonlinur/" class="btn btn-primary" target="_blank">📦 Install from PyPI</a>
+    <a href="https://github.com/merwanroudane/hybridnonlinur" class="btn btn-outline" target="_blank">⭐ View on GitHub</a>
+  </div>
+</div>
+</section>
+
+<section id="features" style="padding-top:5rem;">
+<div class="container">
+  <h2 class="section-title">✨ Key Features</h2>
+  <p class="section-subtitle">State-of-the-art nonlinear unit root testing, faithfully translated from published papers and verified GAUSS source code.</p>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon" style="background:#EEF2FF;color:#4F46E5;">📐</div>
+      <h3>ESTAR &amp; AESTAR Nonlinearity</h3>
+      <p>KSS, Kruse, and Sollis tests detect exponential smooth transition autoregressive dynamics with symmetric and asymmetric adjustment.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#F0FDF4;color:#059669;">〰️</div>
+      <h3>Fourier Structural Breaks</h3>
+      <p>Capture unknown smooth structural breaks using trigonometric functions — no need to specify break dates or number of breaks a priori.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#FEF3C7;color:#D97706;">📊</div>
+      <h3>Quantile Regression</h3>
+      <p>QR-KSS and QR-Fourier-KSS test for unit roots across the entire conditional distribution, robust to outliers and asymmetric shocks.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#FDF2F8;color:#DB2777;">🔬</div>
+      <h3>Fractional Frequencies</h3>
+      <p>FFKRUSE, FFSOLLIS, and KSS-FF extend integer Fourier to fractional frequencies, capturing gradual structural shifts more precisely.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#EFF6FF;color:#2563EB;">🌊</div>
+      <h3>Wavelet Preprocessing</h3>
+      <p>FWKSS applies Haar wavelet smoothing before Fourier-KSS testing, reducing noise while preserving long-run dynamics.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#F5F3FF;color:#7C3AED;">🎯</div>
+      <h3>Bootstrap Critical Values</h3>
+      <p>Sieve bootstrap generates data-specific critical values under H₀, providing exact finite-sample inference beyond asymptotic tables.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="install">
+<div class="container">
+  <h2 class="section-title">📦 Installation</h2>
+  <p class="section-subtitle">Get started in seconds with pip.</p>
+  <div class="install-box">
+    <span class="prompt">$</span> <span class="cmd">pip install hybridnonlinur</span>
+  </div>
+  <p style="color:var(--text2);font-size:0.92rem;margin-bottom:1rem;">Or install from source:</p>
+  <div class="install-box">
+    <span class="prompt">$</span> <span class="cmd">git clone https://github.com/merwanroudane/hybridnonlinur.git</span><br>
+    <span class="prompt">$</span> <span class="cmd">cd hybridnonlinur</span><br>
+    <span class="prompt">$</span> <span class="cmd">pip install -e .</span>
+  </div>
+  <h3 style="margin-top:2rem;font-size:1.1rem;font-weight:700;">Quick Start</h3>
+  <div class="install-box" style="font-size:0.85rem;">
+<span style="color:#7C3AED">import</span> <span style="color:#34D399">numpy</span> <span style="color:#7C3AED">as</span> np
+<span style="color:#7C3AED">import</span> <span style="color:#34D399">hybridnonlinur</span> <span style="color:#7C3AED">as</span> hnl
+
+<span style="color:#64748B"># Load your time series</span>
+y = np.cumsum(np.random.randn(<span style="color:#F59E0B">200</span>))
+
+<span style="color:#64748B"># Run individual test</span>
+result = hnl.fourier_kss(y, model=<span style="color:#F59E0B">1</span>)
+<span style="color:#7C3AED">print</span>(result.summary())
+
+<span style="color:#64748B"># Run ALL 13 tests at once</span>
+results = hnl.run_all(y, series_name=<span style="color:#34D399">"My Series"</span>)
+  </div>
+</div>
+</section>
+
+<section id="tests-overview">
+<div class="container">
+  <h2 class="section-title">🧪 All 13 Implemented Tests</h2>
+  <p class="section-subtitle">Each test is faithfully translated from the original papers and verified GAUSS source code.</p>
+  <table class="results-table">
+    <thead><tr><th>#</th><th>Test</th><th>Python Function</th><th>Type</th><th>Reference</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>KSS</td><td class="mono">kss()</td><td>ESTAR t-stat</td><td>Kapetanios, Shin &amp; Snell (2003)</td></tr>
+      <tr><td>2</td><td>Fourier-KSS</td><td class="mono">fourier_kss()</td><td>ESTAR t-stat</td><td>Christopoulos &amp; León-Ledesma (2010)</td></tr>
+      <tr><td>3</td><td>Fourier-ADF</td><td class="mono">fourier_adf()</td><td>Linear t-stat</td><td>Enders &amp; Lee (2012)</td></tr>
+      <tr><td>4</td><td>Fourier-KSS Bootstrap</td><td class="mono">fourier_kss_bootstrap()</td><td>ESTAR + bootstrap</td><td>Christopoulos &amp; León-Ledesma (2010)</td></tr>
+      <tr><td>5</td><td>Fourier-Kruse</td><td class="mono">fourier_kruse()</td><td>Kruse τ-stat</td><td>Güriş (2019)</td></tr>
+      <tr><td>6</td><td>FFKRUSE</td><td class="mono">ffkruse()</td><td>Kruse τ-stat (FF)</td><td>Biyikli &amp; Hepsağ (2025)</td></tr>
+      <tr><td>7</td><td>Fourier-Sollis</td><td class="mono">fourier_sollis()</td><td>AESTAR F-stat</td><td>Ranjbar et al. (2018)</td></tr>
+      <tr><td>8</td><td>FFSOLLIS</td><td class="mono">ffsollis()</td><td>AESTAR F-stat (FF)</td><td>Biyikli &amp; Hepsağ (2025)</td></tr>
+      <tr><td>9</td><td>Fourier-Sollis ZM</td><td class="mono">fourier_sollis_zeromean()</td><td>AESTAR F-stat</td><td>Hepkorucu &amp; Çınar (2021)</td></tr>
+      <tr><td>10</td><td>QR-KSS</td><td class="mono">qr_kss()</td><td>Quantile t-stat</td><td>Li &amp; Park (2018)</td></tr>
+      <tr><td>11</td><td>QR-Fourier-KSS</td><td class="mono">qr_fourier_kss()</td><td>Quantile + Fourier</td><td>Bahmani-Oskooee et al. (2020)</td></tr>
+      <tr><td>12</td><td>KSS-FF</td><td class="mono">kss_ff()</td><td>ESTAR + Frac. Fourier</td><td>Omay, Corakci &amp; Hasdemir (2021)</td></tr>
+      <tr><td>13</td><td>FWKSS</td><td class="mono">wavelet_kss()</td><td>Wavelet + Fourier</td><td>Haar Wavelet + Fourier-KSS</td></tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<section id="results">
+<div class="container">
+  <h2 class="section-title">📈 Empirical Results — Real Financial Data</h2>
+  <p class="section-subtitle">All 13 tests applied to EUR/USD, Gold, and Crude Oil WTI daily log-returns (Yahoo Finance).</p>
+
+  <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:1rem;">Table 1: Primary Series — EUR/USD Exchange Rate</h3>
+  <table class="results-table">
+    <thead><tr><th>Test</th><th>Statistic</th><th>k*</th><th>Lag</th><th>CV 1%</th><th>CV 5%</th><th>CV 10%</th><th>Reject H₀ (5%)</th></tr></thead>
+    <tbody>
+      <tr><td>KSS</td><td class="mono">-2.9962</td><td>0</td><td>0</td><td class="mono">-3.770</td><td class="mono">-3.090</td><td class="mono">-2.770</td><td class="reject-no">✗</td></tr>
+      <tr><td>Fourier-KSS</td><td class="mono">-3.4528</td><td>1.0</td><td>0</td><td class="mono">-4.350</td><td class="mono">-3.550</td><td class="mono">-3.170</td><td class="reject-no">✗</td></tr>
+      <tr><td>Fourier-ADF</td><td class="mono">-4.2818</td><td>1.0</td><td>0</td><td class="mono">-4.420</td><td class="mono">-3.810</td><td class="mono">-3.490</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Fourier-FKSS (Bootstrap)</td><td class="mono">-3.4528</td><td>1.0</td><td>0</td><td class="mono">-4.152</td><td class="mono">-3.541</td><td class="mono">-3.198</td><td class="reject-no">✗</td></tr>
+      <tr><td>Fourier-Kruse</td><td class="mono">18.5061</td><td>1.0</td><td>0</td><td class="mono">18.820</td><td class="mono">14.800</td><td class="mono">12.520</td><td class="reject-yes">✓</td></tr>
+      <tr><td>FFKRUSE</td><td class="mono">22.4471</td><td>1.1</td><td>0</td><td class="mono">19.560</td><td class="mono">14.860</td><td class="mono">12.700</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Fourier-Sollis</td><td class="mono">9.5171</td><td>1.0</td><td>0</td><td class="mono">9.780</td><td class="mono">7.472</td><td class="mono">6.395</td><td class="reject-yes">✓</td></tr>
+      <tr><td>FFSOLLIS</td><td class="mono">10.7636</td><td>1.1</td><td>0</td><td class="mono">10.165</td><td class="mono">7.910</td><td class="mono">6.871</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Fourier-Sollis (Zero-Mean)</td><td class="mono">9.5171</td><td>1.0</td><td>0</td><td class="mono">9.767</td><td class="mono">7.472</td><td class="mono">6.391</td><td class="reject-yes">✓</td></tr>
+      <tr><td>KSS-FF</td><td class="mono">-4.3171</td><td>1.1</td><td>0</td><td class="mono">-4.103</td><td class="mono">-3.522</td><td class="mono">-3.212</td><td class="reject-yes">✓</td></tr>
+      <tr><td>FWKSS</td><td class="mono">-2.6440</td><td>1.0</td><td>0</td><td class="mono">-4.350</td><td class="mono">-3.550</td><td class="mono">-3.170</td><td class="reject-no">✗</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.82rem;color:var(--text3);margin-top:0.75rem;">Note: ✓ = reject H₀ (unit root) at 5%. KSS/Fourier-KSS/ADF use left-tail t-test; Kruse/Sollis use right-tail F/τ-test.</p>
+
+  <div class="fig-container" style="margin-top:3rem;">
+    <img src="img/cell_35.png" alt="Comparison Dashboard">
+    <p class="fig-caption">Figure 1: Test Statistics Comparison Dashboard — All 11 standard tests on EUR/USD</p>
+  </div>
+  <div class="fig-container">
+    <img src="img/cell_38.png" alt="Bar Chart">
+    <p class="fig-caption">Figure 2: Test Statistics vs 5% Critical Values — Bar chart comparison</p>
+  </div>
+</div>
+</section>
+
+<section id="multi-series">
+<div class="container">
+  <h2 class="section-title">🔄 Multi-Series Analysis</h2>
+  <p class="section-subtitle">All 11 standard tests across EUR/USD, Gold, and Crude Oil WTI.</p>
+
+  <table class="results-table">
+    <thead><tr><th>Series</th><th>Test</th><th>Stat</th><th>k*</th><th>Lag</th><th>CV 5%</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>EUR/USD</td><td>KSS</td><td class="mono">-2.9962</td><td>0</td><td>0</td><td class="mono">-3.090</td><td class="reject-no">✗</td></tr>
+      <tr><td>EUR/USD</td><td>F-KSS</td><td class="mono">-3.4528</td><td>1.0</td><td>0</td><td class="mono">-3.550</td><td class="reject-no">✗</td></tr>
+      <tr><td>EUR/USD</td><td>F-ADF</td><td class="mono">-4.2818</td><td>1.0</td><td>0</td><td class="mono">-3.810</td><td class="reject-yes">✓</td></tr>
+      <tr><td>EUR/USD</td><td>F-Kruse</td><td class="mono">18.5061</td><td>1.0</td><td>0</td><td class="mono">14.800</td><td class="reject-yes">✓</td></tr>
+      <tr><td>EUR/USD</td><td>FFKRUSE</td><td class="mono">22.4471</td><td>1.1</td><td>0</td><td class="mono">14.860</td><td class="reject-yes">✓</td></tr>
+      <tr><td>EUR/USD</td><td>F-Sollis</td><td class="mono">9.5171</td><td>1.0</td><td>0</td><td class="mono">7.472</td><td class="reject-yes">✓</td></tr>
+      <tr><td>EUR/USD</td><td>FFSOLLIS</td><td class="mono">10.7636</td><td>1.1</td><td>0</td><td class="mono">7.910</td><td class="reject-yes">✓</td></tr>
+      <tr><td>EUR/USD</td><td>F-Sol-ZM</td><td class="mono">9.5171</td><td>1.0</td><td>0</td><td class="mono">7.472</td><td class="reject-yes">✓</td></tr>
+      <tr><td>EUR/USD</td><td>KSS-FF</td><td class="mono">-4.3171</td><td>1.1</td><td>0</td><td class="mono">-3.522</td><td class="reject-yes">✓</td></tr>
+      <tr><td>EUR/USD</td><td>FWKSS</td><td class="mono">-2.6440</td><td>1.0</td><td>0</td><td class="mono">-3.550</td><td class="reject-no">✗</td></tr>
+      <tr style="background:#F8FAFC;"><td colspan="7" style="padding:0.3rem;"></td></tr>
+      <tr><td>Gold</td><td>KSS</td><td class="mono">-2.0616</td><td>0</td><td>0</td><td class="mono">-3.090</td><td class="reject-no">✗</td></tr>
+      <tr><td>Gold</td><td>F-KSS</td><td class="mono">-3.9598</td><td>1.0</td><td>0</td><td class="mono">-3.550</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Gold</td><td>F-ADF</td><td class="mono">-3.2751</td><td>1.0</td><td>0</td><td class="mono">-3.810</td><td class="reject-no">✗</td></tr>
+      <tr><td>Gold</td><td>F-Kruse</td><td class="mono">20.3678</td><td>1.0</td><td>0</td><td class="mono">14.800</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Gold</td><td>FFKRUSE</td><td class="mono">17.4392</td><td>0.9</td><td>0</td><td class="mono">14.860</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Gold</td><td>F-Sollis</td><td class="mono">8.8477</td><td>1.0</td><td>0</td><td class="mono">7.472</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Gold</td><td>FFSOLLIS</td><td class="mono">8.2378</td><td>0.9</td><td>0</td><td class="mono">7.910</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Gold</td><td>F-Sol-ZM</td><td class="mono">8.8477</td><td>1.0</td><td>0</td><td class="mono">7.472</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Gold</td><td>KSS-FF</td><td class="mono">-3.8767</td><td>0.9</td><td>0</td><td class="mono">-3.522</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Gold</td><td>FWKSS</td><td class="mono">-3.1232</td><td>1.0</td><td>0</td><td class="mono">-3.550</td><td class="reject-no">✗</td></tr>
+      <tr style="background:#F8FAFC;"><td colspan="7" style="padding:0.3rem;"></td></tr>
+      <tr><td>Crude Oil WTI</td><td>KSS</td><td class="mono">-2.7015</td><td>0</td><td>0</td><td class="mono">-3.090</td><td class="reject-no">✗</td></tr>
+      <tr><td>Crude Oil WTI</td><td>F-KSS</td><td class="mono">-4.0031</td><td>1.0</td><td>0</td><td class="mono">-3.550</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Crude Oil WTI</td><td>F-ADF</td><td class="mono">-4.3327</td><td>1.0</td><td>0</td><td class="mono">-3.810</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Crude Oil WTI</td><td>F-Kruse</td><td class="mono">15.8427</td><td>1.0</td><td>0</td><td class="mono">14.800</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Crude Oil WTI</td><td>FFKRUSE</td><td class="mono">16.1640</td><td>0.9</td><td>0</td><td class="mono">14.860</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Crude Oil WTI</td><td>F-Sollis</td><td class="mono">7.8902</td><td>1.0</td><td>0</td><td class="mono">7.472</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Crude Oil WTI</td><td>FFSOLLIS</td><td class="mono">7.8148</td><td>0.9</td><td>0</td><td class="mono">7.910</td><td class="reject-no">✗</td></tr>
+      <tr><td>Crude Oil WTI</td><td>F-Sol-ZM</td><td class="mono">7.8902</td><td>1.0</td><td>0</td><td class="mono">7.472</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Crude Oil WTI</td><td>KSS-FF</td><td class="mono">-3.9699</td><td>0.9</td><td>0</td><td class="mono">-3.522</td><td class="reject-yes">✓</td></tr>
+      <tr><td>Crude Oil WTI</td><td>FWKSS</td><td class="mono">-3.7523</td><td>1.0</td><td>0</td><td class="mono">-3.550</td><td class="reject-yes">✓</td></tr>
+    </tbody>
+  </table>
+
+  <div class="fig-container" style="margin-top:2rem;">
+    <img src="img/cell_41.png" alt="Rejection Heatmap">
+    <p class="fig-caption">Figure 3: Rejection Heatmap — All tests across all three financial series at 5% significance</p>
+  </div>
+</div>
+</section>
+
+<section id="visualizations">
+<div class="container">
+  <h2 class="section-title">📊 Visualizations</h2>
+  <p class="section-subtitle">Publication-quality plots generated by the library.</p>
+
+  <div class="fig-container">
+    <img src="img/cell_05.png" alt="Time Series Data">
+    <p class="fig-caption">Figure 4: Financial Time Series — EUR/USD, Gold, and Crude Oil WTI daily data</p>
+  </div>
+  <div class="fig-container">
+    <img src="img/cell_09.png" alt="Fourier Fit">
+    <p class="fig-caption">Figure 5: Fourier Approximation — Optimal frequency fit capturing structural breaks in EUR/USD</p>
+  </div>
+  <div class="fig-container">
+    <img src="img/cell_26.png" alt="QR-KSS Quantile Profile">
+    <p class="fig-caption">Figure 6: QR-KSS Quantile Profile — Test statistics across τ ∈ {0.1, ..., 0.9}</p>
+  </div>
+  <div class="fig-container">
+    <img src="img/cell_29.png" alt="QR-Fourier-KSS Profile">
+    <p class="fig-caption">Figure 7: QR-Fourier-KSS Quantile Profile — One-step Fourier quantile regression</p>
+  </div>
+</div>
+</section>
+
+<section id="tests">
+<div class="container">
+  <h2 class="section-title">🔍 Individual Test Results</h2>
+  <p class="section-subtitle">Detailed output from each test on the EUR/USD exchange rate series.</p>
+
+  <div class="test-detail">
+    <h4>1. KSS — Kapetanios, Shin &amp; Snell (2003)</h4>
+    <p class="ref">ESTAR nonlinearity under demeaned/detrended series</p>
+    <pre>Test Statistic:  -2.9962    Model: Intercept + Trend
+Optimal k: 0    Optimal Lag: 0
+CV 1%: -3.770  |  No       CV 5%: -3.090  |  No
+CV 10%: -2.770  |  Yes *</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>2. Fourier-KSS — Christopoulos &amp; León-Ledesma (2010)</h4>
+    <p class="ref">Fourier detrending + ESTAR nonlinearity</p>
+    <pre>Test Statistic:  -3.4528    Model: Intercept
+Optimal k: 1.0    Optimal Lag: 0
+CV 1%: -4.350  |  No       CV 5%: -3.550  |  No
+CV 10%: -3.170  |  Yes *
+F-stat (Fourier): 123.2801  F critical (5%): 4.929</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>3. Fourier-ADF — Enders &amp; Lee (2012)</h4>
+    <p class="ref">Linear ADF with Fourier structural breaks</p>
+    <pre>Test Statistic:  -4.2818    Model: Intercept
+Optimal k: 1.0    Optimal Lag: 0
+CV 1%: -4.420  |  No       CV 5%: -3.810  |  Yes *
+CV 10%: -3.490  |  Yes *
+F-stat (Fourier): 123.2801  F critical (5%): 4.929</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>4. Fourier-KSS Bootstrap — Christopoulos &amp; León-Ledesma (2010)</h4>
+    <p class="ref">Sieve bootstrap critical values (500 replications)</p>
+    <pre>Test Statistic:  -3.4528    Model: Intercept
+Optimal k: 1.0    Optimal Lag: 0
+Bootstrap CV 1%: -4.152  |  No   CV 5%: -3.541  |  No
+CV 10%: -3.198  |  Yes *</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>5. Fourier-Kruse — Güriş (2019)</h4>
+    <p class="ref">ESTAR with non-zero threshold c ≠ 0</p>
+    <pre>Test Statistic (τ):  18.5061    Model: Intercept
+Optimal k: 1.0    Optimal Lag: 0
+CV 1%: 18.820  |  No       CV 5%: 14.800  |  Yes *
+CV 10%: 12.520  |  Yes *</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>6. FFKRUSE — Biyikli &amp; Hepsağ (2025)</h4>
+    <p class="ref">Fractional frequency Fourier-Kruse extension</p>
+    <pre>Test Statistic (τ):  22.4471    Model: Intercept
+Optimal k: 1.1    Optimal Lag: 0
+CV 1%: 19.560  |  Yes *    CV 5%: 14.860  |  Yes *
+CV 10%: 12.700  |  Yes *</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>7. Fourier-Sollis — Ranjbar et al. (2018)</h4>
+    <p class="ref">AESTAR asymmetric nonlinearity + Fourier breaks</p>
+    <pre>Test Statistic (F):  9.5171    Model: Intercept
+Optimal k: 1.0    Optimal Lag: 0
+CV 1%: 9.780  |  No        CV 5%: 7.472  |  Yes *
+CV 10%: 6.395  |  Yes *</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>8. FFSOLLIS — Biyikli &amp; Hepsağ (2025)</h4>
+    <p class="ref">Fractional frequency Fourier-Sollis</p>
+    <pre>Test Statistic (F):  10.7636    Model: Intercept
+Optimal k: 1.1    Optimal Lag: 0
+CV 1%: 10.165  |  Yes *    CV 5%: 7.910  |  Yes *
+CV 10%: 6.871  |  Yes *</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>9. Fourier-Sollis Zero-Mean — Hepkorucu &amp; Çınar (2021)</h4>
+    <p class="ref">Zero-mean model for transformed series</p>
+    <pre>Test Statistic (F):  9.5171    Model: Zero-Mean
+Optimal k: 1.0    Optimal Lag: 0
+CV 1%: 9.767  |  No        CV 5%: 7.472  |  Yes *
+CV 10%: 6.391  |  Yes *</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>10. QR-KSS — Li &amp; Park (2018)</h4>
+    <p class="ref">Quantile regression nonlinear unit root</p>
+    <pre>Quantile    t_T(τ)      CV 5%     Reject
+τ=0.1     -53.1977    -2.1719     Yes
+τ=0.2     -45.3189    -2.3574     Yes
+τ=0.3     -38.5869    -2.3587     Yes
+τ=0.5     -34.4442    -2.3716     Yes
+τ=0.7     -50.9785    -2.3511     Yes
+τ=0.9    -109.0470    -2.2763     Yes</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>11. QR-Fourier-KSS — Bahmani-Oskooee et al. (2020)</h4>
+    <p class="ref">One-step quantile regression with Fourier terms</p>
+    <pre>QKS statistic: 107.194    QCM statistic: 221847.9
+Bootstrap CV: computed via sieve bootstrap under H₀</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>12. KSS-FF — Omay, Corakci &amp; Hasdemir (2021)</h4>
+    <p class="ref">Fractional Fourier function restoring Taylor expansion residuals</p>
+    <pre>Test Statistic:  -4.3171    Model: Intercept
+Optimal k: 1.1 (fractional)    Optimal Lag: 0
+CV 1%: -4.103  |  Yes *    CV 5%: -3.522  |  Yes *
+CV 10%: -3.212  |  Yes *</pre>
+  </div>
+
+  <div class="test-detail">
+    <h4>13. FWKSS — Haar Wavelet + Fourier-KSS</h4>
+    <p class="ref">Wavelet denoising followed by Fourier-KSS testing</p>
+    <pre>Test Statistic:  -2.6440    Model: Intercept
+Optimal k: 1.0    Optimal Lag: 0
+CV 1%: -4.350  |  No       CV 5%: -3.550  |  No
+CV 10%: -3.170  |  No</pre>
+  </div>
+</div>
+</section>
+
+<section id="author">
+<div class="container">
+  <h2 class="section-title">👤 Author</h2>
+  <div class="author-card">
+    <div class="author-avatar">MR</div>
+    <div class="author-info">
+      <h3>Dr. Merwan Roudane</h3>
+      <p>Researcher in Econometrics &amp; Time Series Analysis. Developer of specialized Python libraries for nonlinear unit root testing, quantile regression, and wavelet-based econometric methods.</p>
+      <div class="author-links">
+        <a href="mailto:merwanroudane920@gmail.com">📧 merwanroudane920@gmail.com</a>
+        <a href="https://github.com/merwanroudane" target="_blank">🔗 GitHub Profile</a>
+        <a href="https://github.com/merwanroudane/hybridnonlinur" target="_blank">📂 Repository</a>
+        <a href="https://pypi.org/project/hybridnonlinur/" target="_blank">📦 PyPI Package</a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="references">
+<div class="container">
+  <h2 class="section-title">📚 References</h2>
+  <p class="section-subtitle">Published papers and GAUSS source code underlying each test.</p>
+  <ol class="ref-list">
+    <li>Kapetanios, G., Shin, Y. &amp; Snell, A. (2003). Testing for a unit root in the nonlinear STAR framework. <em>J. Econometrics</em>, 112(2), 359–379.</li>
+    <li>Christopoulos, D.K. &amp; León-Ledesma, M.A. (2010). Smooth breaks and non-linear mean reversion. <em>J. Int. Money Finance</em>, 29(6), 1076–1093.</li>
+    <li>Enders, W. &amp; Lee, J. (2012). A unit root test using a Fourier series. <em>J. Time Series Analysis</em>, 33(5), 728–743.</li>
+    <li>Kruse, R. (2011). A new unit root test against ESTAR. <em>Statistical Papers</em>, 52(1), 71–85.</li>
+    <li>Sollis, R. (2009). A simple unit root test against AESTAR. <em>Economic Modelling</em>, 26(1), 118–125.</li>
+    <li>Becker, R., Enders, W. &amp; Lee, J. (2006). A stationarity test with an unknown number of breaks. <em>J. Time Series Analysis</em>, 27(3), 381–409.</li>
+    <li>Güriş, B. (2019). A new nonlinear unit root test with Fourier function. <em>Comm. Stat. Simul. Comput.</em>, 48(10), 3056–3062.</li>
+    <li>Ranjbar, O., Chang, T., Elmi, Z. &amp; Lee, C.-C. (2018). A new unit root test against asymmetric ESTAR. <em>Iranian Economic Review</em>, 22(1), 51–62.</li>
+    <li>Li, H. &amp; Park, S.Y. (2018). Testing for a unit root in a nonlinear quantile framework. <em>Econometric Reviews</em>, 37(8), 867–892.</li>
+    <li>Bahmani-Oskooee, M. et al. (2020). Fourier nonlinear quantile unit root test. <em>Bull. Econ. Research</em>, 72(1), 14–33.</li>
+    <li>Hepkorucu, A. &amp; Çınar, M. (2021). Testing the power properties of Fourier-Sollis under zero-mean. <em>KOCATEPEİİBFD</em>, 23(2), 171–181.</li>
+    <li>Omay, T., Corakci, A. &amp; Hasdemir, E. (2021). High persistence and nonlinear behavior: unit root testing in the ESTAR framework. <em>Mathematics</em>, 9(20), 2534.</li>
+    <li>Biyikli, S.İ. &amp; Hepsağ, A. (2025). New nonlinear unit root tests based on fractional frequency Fourier functions. <em>Comm. Stat. Simul. Comput.</em></li>
+  </ol>
+</div>
+</section>
+
+<section id="citation">
+<div class="container">
+  <h2 class="section-title">📝 Citation</h2>
+  <div class="install-box" style="font-size:0.82rem;">
+@software{roudane2026hybridnonlinur,
+  author = {Roudane, Merwan},
+  title  = {hybridnonlinur: Nonlinear Hybrid Unit Root Tests in Python},
+  year   = {2026},
+  url    = {https://github.com/merwanroudane/hybridnonlinur}
+}</div>
+</div>
+</section>
+
+<footer>
+  <div class="container">
+    <p style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem;">hybridnonlinur</p>
+    <p>Nonlinear Hybrid Unit Root Tests — v1.0.0</p>
+    <p style="margin-top:0.75rem;">
+      <a href="https://github.com/merwanroudane/hybridnonlinur">GitHub</a> &nbsp;·&nbsp;
+      <a href="https://pypi.org/project/hybridnonlinur/">PyPI</a> &nbsp;·&nbsp;
+      <a href="mailto:merwanroudane920@gmail.com">Contact</a>
+    </p>
+    <p style="margin-top:1rem;font-size:0.82rem;">© 2026 Dr. Merwan Roudane — MIT License</p>
+  </div>
+</footer>
+</body>
+</html>

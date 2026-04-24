@@ -1,0 +1,352 @@
+﻿===== CELL 7 =====
+
+=======================================================
+  KSS Unit Root Test
+=======================================================
+---------------------  -------------------------------
+                 Test  KSS
+                Model  Intercept + Trend
+       Test Statistic  -2.9962
+Optimal Frequency (k)  0
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  -3.7700  |  No
+             5% level  -3.0900  |  No
+            10% level  -2.7700  |  Yes *
+
+            Reference  Kapetanios, Shin & Snell (2003)
+---------------------  ---------------
+
+===== CELL 9 =====
+
+=======================================================
+  Fourier-KSS Unit Root Test
+=======================================================
+---------------------  -----------------------------------
+                 Test  Fourier-KSS
+                Model  Intercept
+       Test Statistic  -3.4528
+Optimal Frequency (k)  1.0
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  -4.3500  |  No
+             5% level  -3.5500  |  No
+            10% level  -3.1700  |  Yes *
+
+     F-stat (Fourier)  123.2801
+      F critical (5%)  4.9290
+
+            Refe
+<Figure size 1400x800 with 2 Axes>
+
+===== CELL 11 =====
+
+=======================================================
+  Fourier-ADF Unit Root Test
+=======================================================
+---------------------  --------------------------
+                 Test  Fourier-ADF
+                Model  Intercept
+       Test Statistic  -4.2818
+Optimal Frequency (k)  1.0
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  -4.4200  |  No
+             5% level  -3.8100  |  Yes *
+            10% level  -3.4900  |  Yes *
+
+     F-stat (Fourier)  123.2801
+      F critical (5%)  4.9290
+
+            Reference 
+
+===== CELL 13 =====
+
+=======================================================
+  Fourier-FKSS (Bootstrap) Unit Root Test
+=======================================================
+---------------------  -----------------------------------
+                 Test  Fourier-FKSS (Bootstrap)
+                Model  Intercept
+       Test Statistic  -3.4528
+Optimal Frequency (k)  1.0
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  -4.1516  |  No
+             5% level  -3.5415  |  No
+            10% level  -3.1977  |  Yes *
+
+     F-stat (Fourier)  123.2801
+
+            Referenc
+
+===== CELL 15 =====
+
+=======================================================
+  Fourier-Kruse Unit Root Test
+=======================================================
+---------------------  --------------------------
+                 Test  Fourier-Kruse
+                Model  Intercept
+       Test Statistic  18.5061
+Optimal Frequency (k)  1.0
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  18.8200  |  No
+             5% level  14.8000  |  Yes *
+            10% level  12.5200  |  Yes *
+
+     F-stat (Fourier)  123.2801
+      F critical (5%)  4.9290
+
+            Refere
+
+===== CELL 17 =====
+
+=======================================================
+  FFKRUSE Unit Root Test
+=======================================================
+---------------------  --------------------------
+                 Test  FFKRUSE
+                Model  Intercept
+       Test Statistic  22.4471
+Optimal Frequency (k)  1.1
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  19.5600  |  Yes *
+             5% level  14.8600  |  Yes *
+            10% level  12.7000  |  Yes *
+
+     F-stat (Fourier)  137.2141
+      F critical (5%)  4.9290
+
+            Reference  Biyi
+
+===== CELL 19 =====
+
+=======================================================
+  Fourier-Sollis Unit Root Test
+=======================================================
+---------------------  --------------------------
+                 Test  Fourier-Sollis
+                Model  Intercept
+       Test Statistic  9.5171
+Optimal Frequency (k)  1.0
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  9.7800  |  No
+             5% level  7.4720  |  Yes *
+            10% level  6.3950  |  Yes *
+
+     F-stat (Fourier)  123.2801
+      F critical (5%)  4.9290
+
+            Referenc
+
+===== CELL 21 =====
+
+=======================================================
+  FFSOLLIS Unit Root Test
+=======================================================
+---------------------  --------------------------
+                 Test  FFSOLLIS
+                Model  Intercept
+       Test Statistic  10.7636
+Optimal Frequency (k)  1.1
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  10.1650  |  Yes *
+             5% level  7.9100  |  Yes *
+            10% level  6.8710  |  Yes *
+
+     F-stat (Fourier)  137.2141
+
+            Reference  Biyikli & Hepsa─ƒ (2025)
+----------
+
+===== CELL 23 =====
+
+=======================================================
+  Fourier-Sollis (Zero-Mean) Unit Root Test
+=======================================================
+---------------------  --------------------------
+                 Test  Fourier-Sollis (Zero-Mean)
+                Model  0
+       Test Statistic  9.5171
+Optimal Frequency (k)  1.0
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  9.7670  |  No
+             5% level  7.4720  |  Yes *
+            10% level  6.3910  |  Yes *
+
+     F-stat (Fourier)  123.2801
+
+            Reference  Hepkorucu &
+
+===== CELL 25 =====
+
+=================================================================
+  QR-KSS Quantile Unit Root Test
+=================================================================
+Quantile       t_T(¤ä)     CV 5%  Reject
+----------  ---------  --------  --------
+t=0.1        -53.1977  -2.17193  Yes
+t=0.2        -45.3189  -2.35735  Yes
+t=0.3        -38.5869  -2.35866  Yes
+t=0.4        -35.2806  -2.36652  Yes
+t=0.5        -34.4442  -2.37158  Yes
+t=0.6        -42.4234  -2.35285  Yes
+t=0.7        -50.9785  -2.35111  Yes
+t=0.8        -65.1963  -2.32712  Yes
+t=0.9       -109.047   -2.27627  Yes
+
+-------------  ---
+
+===== CELL 28 =====
+
+=================================================================
+  QR-Fourier-KSS Quantile Unit Root Test
+=================================================================
+Quantile       t_T(¤ä)    CV 5%  Reject
+----------  ---------  -------  --------
+t=0.1        -80.9845      nan  No
+t=0.2        -53.5987      nan  No
+t=0.3        -51.1503      nan  No
+t=0.4        -48.915       nan  No
+t=0.5        -43.5448      nan  No
+t=0.6        -46.1671      nan  No
+t=0.7        -47.396       nan  No
+t=0.8        -59.7782      nan  No
+t=0.9       -107.194       nan  No
+
+-------------  ---------
+QKS s
+
+===== CELL 31 =====
+
+=======================================================
+  KSS-FF Unit Root Test
+=======================================================
+---------------------  -------------------------------
+                 Test  KSS-FF
+                Model  Intercept
+       Test Statistic  -4.3171
+Optimal Frequency (k)  1.1
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  -4.1030  |  Yes *
+             5% level  -3.5220  |  Yes *
+            10% level  -3.2120  |  Yes *
+
+     F-stat (Fourier)  137.2141
+
+            Reference  Omay, Corakci & Hasdemir (2021)
+
+===== CELL 33 =====
+
+=======================================================
+  FWKSS Unit Root Test
+=======================================================
+---------------------  -----------------------------------------
+                 Test  FWKSS
+                Model  Intercept
+       Test Statistic  -2.6440
+Optimal Frequency (k)  1.0
+      Optimal Lag (p)  0
+
+                       Critical Value | Reject H0
+             1% level  -4.3500  |  No
+             5% level  -3.5500  |  No
+            10% level  -3.1700  |  No
+
+     F-stat (Fourier)  64.6760
+
+            Reference  Aydin (FWKSS, Haar wavelet + Four
+
+===== CELL 36 =====
+[HTML TABLE]
+<h3 style="font-family:sans-serif">Table 1: Unit Root Test Results</h3><table class="dataframe table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Test</th>
+      <th>Statistic</th>
+      <th>k*</th>
+      <th>Lag</th>
+      <th>CV 1%</th>
+      <th>CV 5%</th>
+      <th>CV 10%</th>
+      <th>Reject HÔéÇ (5%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>KSS</td>
+      <td>-2.9962</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-3.770</td>
+      <td>-3.090</td>
+      <td>-2.770</td>
+      <td><span style="color:#EF4444;font-weight:bold">Ô£ù</span></td>
+    </tr>
+    <tr>
+      <td>Fourier-KSS</td>
+      <td>-3.4528</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>-4.350</td>
+      <td>-3.550</td>
+      <td>-3.170</td>
+      <td><span style="color:#EF4444;font-weight:bold
+
+===== CELL 42 =====
+[HTML TABLE]
+<h3>Table 2: Multi-Series Results</h3><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Series</th>
+      <th>Test</th>
+      <th>Stat</th>
+      <th>k*</th>
+      <th>Lag</th>
+      <th>CV 5%</th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>EUR/USD</td>
+      <td>KSS</td>
+      <td>-2.9962</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-3.090</td>
+      <td><span style="color:#EF4444;font-weight:bold">Ô£ù</span></td>
+    </tr>
+    <tr>
+      <td>EUR/USD</td>
+      <td>F-KSS</td>
+      <td>-3.4528</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>-3.550</td>
+      <td><span style="color:#EF4444;font-weight:bold">Ô£ù</span></td>
+    </tr>
+    <tr>
+      <td>EUR/USD</td>
+      <td>F-ADF</td>
+      <td>-4.2818</td>
+      <td>1.0</td>
+
+
